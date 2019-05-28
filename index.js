@@ -1,3 +1,4 @@
+//// Constructor initialize
 var Word = require("./word.js");
 var inquirer = require("inquirer");
 
@@ -5,7 +6,7 @@ var inquirer = require("inquirer");
 var letterArray = "abcdefghijklmnopqrstuvwxyz";
 
 // List of words to choose from
-var CountriesInAfrica = ["algeria", "benin", "cote divoire", "senegal", "mali", "guinee", "morroco", "togo", "mauritania", "congo"];
+var CountriesInAfrica = ["algeria", "benin", "cote d'ivoire", "senegal", "mali", "guinee", "morroco", "togo", "mauritania", "congo"];
 
 // Pick Random index from CountriesInAfrica array
 var randomIndex = Math.floor(Math.random() * CountriesInAfrica.length);
@@ -38,7 +39,8 @@ function knowledge() {
         requireNewWord = false;
     }
 
-     // TestS if a letter guessed is correct
+
+    // TestS if a letter guessed is correct
     var wordComplete = [];
     computerWord.objArray.forEach(completeCheck);
 
@@ -103,3 +105,50 @@ function knowledge() {
 
                             restartGame();
                         }
+
+
+                        
+                        function wordCheck(key) {
+                            wordCheckArray.push(key.guessed);
+                        }
+                    }
+                }
+            })
+    } else {
+        console.log("YOU WIN!\n");
+
+        restartGame();
+    }
+
+   
+    function completeCheck(key) {
+        wordComplete.push(key.guessed);
+    }
+
+}
+
+function restartGame() {
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                message: "Would you like to:",
+                choices: ["Play Again", "Exit"],
+                name: "restart"
+            }
+        ])
+        .then(function (input) {
+            if (input.restart === "Play Again") {
+                requireNewWord = true;
+                incorrectLetters = [];
+                correctLetters = [];
+                guessesLeft = 10;
+                knowledge();
+            } else {
+                return
+            }
+        })
+}
+
+knowledge();
+
