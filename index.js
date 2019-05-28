@@ -7,7 +7,7 @@ var letterArray = "abcdefghijklmnopqrstuvwxyz";
 // List of words to choose from
 var CountriesInAfrica = ["algeria", "benin", "cote divoire", "senegal", "mali", "guinee", "morroco", "togo", "mauritania", "congo"];
 
-// Pick Random index from AfricanCountries array
+// Pick Random index from CountriesInAfrica array
 var randomIndex = Math.floor(Math.random() * CountriesInAfrica.length);
 var randomWord = CountriesInAfrica[randomIndex];
 
@@ -27,7 +27,7 @@ function knowledge() {
 
     // Generates new word for Word constructor if true
     if (requireNewWord) {
-        // Selects random AfricanCountries array
+        // Selects random CountriesInAfrica array
         var randomIndex = Math.floor(Math.random() * CountriesInAfrica.length);
         var randomWord = CountriesInAfrica[randomIndex];
 
@@ -37,3 +37,69 @@ function knowledge() {
         
         requireNewWord = false;
     }
+
+     // TestS if a letter guessed is correct
+    var wordComplete = [];
+    computerWord.objArray.forEach(completeCheck);
+
+    // letters remaining to be guessed
+    if (wordComplete.includes(false)) {
+        inquirer
+            .prompt([
+                {
+                    type: "input",
+                    message: "Guess a letter between A-Z!",
+                    name: "userinput"
+                }
+            ])
+            .then(function (input) {
+
+               
+                if (!letterArray.includes(input.userinput) || input.userinput.length > 1) {
+                    console.log("\nPlease try again!\n");
+                    knowledge();
+                } else {
+
+                   
+                    if (incorrectLetters.includes(input.userinput) || correctLetters.includes(input.userinput) || input.userinput === "") {
+                        console.log("\nAlready Guessed or Nothing Entered\n");
+                        knowledge();
+                    } else {
+
+                        // Checks if guess is correct
+                        var wordCheckArray = [];
+
+                        
+                        computerWord.userGuess(input.userinput);
+
+                        // Checks if guess is correct
+                        computerWord.objArray.forEach(wordCheck);
+                        if (wordCheckArray.join('') === wordComplete.join('')) {
+                            console.log("\nIncorrect\n");
+                           
+                            incorrectLetters.push(input.userinput);
+                            guessesLeft--;
+                        } else {
+                            console.log("\nCorrect!\n");
+                           
+                            correctLetters.push(input.userinput);
+                        }
+
+                        
+                        computerWord.log();
+
+                        // Print guesses left
+                        console.log("Guesses Left: " + guessesLeft + "\n");
+
+                        // Print letters guessed already
+                        console.log("Letters Guessed: " + incorrectLetters.join(" ") + "\n");
+
+                        // Guesses left
+                        if (guessesLeft > 0) {
+                            // Call function 
+                            knowledge();
+                        } else {
+                            console.log("Sorry, you lose!\n");
+
+                            restartGame();
+                        }
